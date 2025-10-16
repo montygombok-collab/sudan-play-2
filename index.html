@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudan Play - متجر التطبيقات السوداني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ... (كود الـ CSS بالكامل من index (1).html بدون تغيير) ... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: rgb(74, 107, 255);
+            --secondary: rgb(255, 94, 125);
+            --accent: rgb(46, 196, 182);
+            --dark: rgb(30, 30, 45);
+            --light: rgb(248, 249, 254);
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-light: linear-gradient(135deg, rgba(74, 107, 255, 0.1) 0%, rgba(255, 94, 125, 0.1) 100%);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: var(--light);
+            min-height: 100vh; /* تم التصحيح من 10vh إلى 100vh */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header / Navigation --- */
+        header {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 15px 20px; /* تم تقليل padding ليتناسب مع الشاشات الصغيرة */
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        
+        .logo img {
+            height: 40px;
+            border-radius: 8px;
+            margin-left: 10px; 
+            box-shadow: 0 0 10px rgba(74, 107, 255, 0.5);
+        }
+        
+        .logo h1 {
+            color: var(--light);
+            font-size: 1.5em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            margin-right: 20px; /* تم تقليل المسافة بين الروابط */
+            font-size: 1em;
+            transition: color 0.3s;
+            white-space: nowrap; /* منع التفاف النص */
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            background: var(--gradient);
+            color: var(--light);
+            padding: 60px 20px; /* تم تعديل padding ليتناسب مع الشاشات الصغيرة */
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2.2em; /* تم تعديل الحجم ليتناسب مع الشاشات الصغيرة */
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .hero p {
+            font-size: 1.1em; /* تم تعديل الحجم ليتناسب مع الشاشات الصغيرة */
+            opacity: 0.9;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero button {
+            background-color: var(--dark);
+            color: var(--light);
+            border: none;
+            padding: 14px 30px; /* تم تعديل padding ليتناسب مع الشاشات الصغيرة */
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .hero button:hover {
+            background-color: #000;
+            transform: translateY(-3px);
+        }
+
+        /* --- App Showcase --- */
+        #apps {
+            padding: 40px 20px; /* تم تعديل padding ليتناسب مع الشاشات الصغيرة */
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        #apps h2 {
+            text-align: center;
+            color: var(--dark);
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .filter-section {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 30px;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap; /* السماح بالتفاف العناصر على الشاشات الصغيرة */
+        }
+
+        .filter-section label {
+            font-weight: bold;
+            color: var(--dark);
+            font-size: 1.1em;
+        }
+
+        #categoryFilter {
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1em;
+            min-width: 200px;
+            width: 100%; /* جعل العرض 100% على الشاشات الصغيرة */
+            max-width: 250px; /* تحديد أقصى عرض */
+        }
+
+        #apps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .app-card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .app-cover {
+            height: 150px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .app-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .app-cover:hover img {
+            transform: scale(1.05);
+        }
+
+        .app-cover .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .app-cover:hover .overlay {
+            opacity: 1;
+        }
+
+        .app-cover .overlay i {
+            color: var(--light);
+            font-size: 2em;
+        }
+
+        .app-info {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            flex-shrink: 0;
+        }
+
+        .app-text {
+            flex-grow: 1;
+            min-width: 0; /* منع تجاوز النص للحاوية */
+        }
+
+        .app-title {
+            font-size: 1.2em;
+            color: var(--dark);
+            margin: 0 0 5px 0;
+            line-height: 1.3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .app-category {
+            font-size: 0.9em;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .app-rating {
+            font-size: 0.8em;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .app-rating i {
+            color: #ccc;
+        }
+
+        .app-rating i.filled {
+            color: gold;
+        }
+
+        .download-btn {
+            background: var(--secondary);
+            color: var(--light);
+            border: none;
+            padding: 10px 15px;
+            width: 90%;
+            margin: 0 auto 15px auto;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: opacity 0.3s;
+            text-align: center;
+        }
+
+        .download-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* --- App Details Modal --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--light);
+            margin: 5% auto;
+            padding: 25px; /* تم تعديل padding ليتناسب مع الشاشات الصغيرة */
+            border-radius: 15px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            max-height: 90vh; /* تحديد أقصى ارتفاع */
+            overflow-y: auto; /* إضافة تمرير رأسي عند الحاجة */
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+
+        .details-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        #detailsIcon {
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            flex-shrink: 0;
+        }
+
+        .details-text {
+            flex: 1;
+            min-width: 0; /* منع تجاوز النص للحاوية */
+        }
+
+        .details-text h3 {
+            font-size: 1.8em;
+            color: var(--dark);
+            margin: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .details-meta {
+            font-size: 0.9em;
+            color: #777;
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+            flex-wrap: wrap; /* السماح بالتفاف العناصر على الشاشات الصغيرة */
+        }
+
+        .details-meta span strong {
+            color: var(--primary);
+        }
+
+        .details-description {
+            margin-bottom: 20px;
+            color: #444;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .details-info {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            background-color: var(--gradient-light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* السماح بالتفاف العناصر على الشاشات الصغيرة */
+        }
+
+        .details-info div {
+            flex: 1;
+            min-width: 100px; /* تحديد عرض أدنى للعناصر */
+            margin: 5px 0; /* إضافة مسافة رأسية بين العناصر */
+        }
+
+        .details-info p {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .details-info span {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        #detailsScreenshots {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: thin; /* شريط تمرير أنيق للمتصفحات الحديثة */
+        }
+
+        #detailsScreenshots img {
+            width: 200px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+
+        #detailsScreenshots img:hover {
+            transform: scale(1.03);
+        }
+
+        .download-modal-btn {
+            background: var(--gradient);
+            color: var(--light);
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 20px;
+            transition: opacity 0.3s;
+        }
+
+        .download-modal-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Image View Modal */
+        #imageModal .modal-content {
+            margin: 2% auto;
+            max-width: 90%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modalImage {
+            max-width: 100%;
+            max-height: 90vh;
+            display: block;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        /* --- Contact Section --- */
+        #contact {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 60px 20px; /* تم تعديل padding ليتناسب مع الشاشات الصغيرة */
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        #contact h2 {
+            color: var(--accent);
+        }
+
+        #contact p {
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-form {
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-form button {
+            background: var(--secondary);
+            color: var(--light);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: opacity 0.3s;
+            width: 100%;
+        }
+
+        .contact-form button:hover {
+            opacity: 0.8;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            text-align: center;
+            padding: 20px;
+            margin-top: auto; /* دفع الفوتر للأسفل */
+        }
+
+        /* --- إضافة تصميم شريط الرسائل التفاعلية (Toast/Snackbar) --- */
+        #toast-message {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--dark);
+            color: var(--light);
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 3000;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 30px;
+            font-size: 1.1em;
+            box-shadow: var(--shadow);
+            transition: visibility 0s, opacity 0.5s linear;
+            opacity: 0;
+            max-width: 90%; /* تحديد أقصى عرض على الشاشات الصغيرة */
+        }
+
+        #toast-message.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* --- تصميم زر التحميل وتأثير الـ Loader --- */
+        .download-btn.loading {
+            background: var(--dark);
+            pointer-events: none;
+            position: relative;
+            color: transparent !important;
+            min-height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .download-modal-btn.loading {
+            background: var(--dark);
+            pointer-events: none;
+            position: relative;
+            color: transparent !important;
+            min-height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .download-btn.loading::after, 
+        .download-modal-btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* تصميم الاستجابة للهواتف والأجهزة اللوحية */
+        @media (max-width: 1200px) {
+            nav {
+                padding: 0 20px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero h2 {
+                font-size: 2em;
+            }
+            
+            .hero p {
+                font-size: 1em;
+            }
+            
+            #apps-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 15px;
+            }
+            
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .logo {
+                margin-bottom: 10px;
+            }
+            
+            .logo h1 {
+                font-size: 1.3em;
+            }
+
+            .nav-links {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .nav-links a {
+                margin-right: 0;
+                font-size: 0.9em;
+                padding: 5px 0;
+            }
+
+            .hero {
+                padding: 50px 15px;
+            }
+
+            .hero h2 {
+                font-size: 1.8em;
+            }
+
+            .hero button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+
+            #apps {
+                padding: 30px 15px;
+            }
+
+            #apps h2 {
+                font-size: 1.8em;
+            }
+
+            .filter-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            #categoryFilter {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            #apps-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .app-info {
+                padding: 12px;
+            }
+
+            .app-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .app-title {
+                font-size: 1.1em;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                padding: 20px;
+                width: 95%;
+            }
+
+            .details-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .details-text h3 {
+                margin-top: 10px;
+                font-size: 1.5em;
+            }
+
+            .details-info {
+                flex-wrap: wrap;
+            }
+            
+            .details-info > div {
+                flex-basis: 50%;
+                margin: 10px 0;
+            }
+
+            #detailsScreenshots img {
+                width: 150px;
+                height: 260px;
+            }
+
+            #contact {
+                padding: 50px 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .logo {
+                font-size: 1.5em;
+            }
+            
+            .logo img {
+                height: 35px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links a {
+                margin: 0 8px 5px 8px;
+            }
+
+            .hero h2 {
+                font-size: 1.6em;
+            }
+
+            .hero p {
+                font-size: 0.95em;
+            }
+
+            #apps h2 {
+                font-size: 1.6em;
+            }
+
+            .app-card {
+                border-radius: 12px;
+            }
+
+            .app-cover {
+                height: 130px;
+            }
+
+            .app-info {
+                gap: 12px;
+            }
+
+            .modal-content {
+                padding: 15px;
+            }
+
+            .close-btn {
+                top: 10px;
+                left: 15px;
+                font-size: 24px;
+            }
+
+            .details-text h3 {
+                font-size: 1.3em;
+            }
+
+            .details-info p {
+                font-size: 1.3em;
+            }
+
+            #detailsScreenshots img {
+                width: 120px;
+                height: 210px;
+            }
+
+            .download-modal-btn {
+                padding: 12px;
+                font-size: 1em;
+            }
+
+            #contact h2 {
+                font-size: 1.6em;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .logo h1 {
+                font-size: 1.1em;
+            }
+            
+            .nav-links a {
+                font-size: 0.85em;
+            }
+
+            .hero h2 {
+                font-size: 1.4em;
+            }
+
+            #apps h2 {
+                font-size: 1.4em;
+            }
+
+            .details-info > div {
+                flex-basis: 100%;
+            }
+
+            #detailsScreenshots img {
+                width: 100px;
+                height: 175px;
+            }
+        }
+    </style>
+</head>
+<body onload="loadApps()">
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>Sudan Play</h1>
+            </div>
+            <div class="nav-links">
+                <a href="#apps"><i class="fas fa-th"></i> التطبيقات</a>
+                <a href="#about"><i class="fas fa-info-circle"></i> عن المتجر</a>
+                <a href="#contact"><i class="fas fa-envelope"></i> تواصل معنا</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>متجر التطبيقات السوداني</h2>
+        <p>اكتشف وحمل أفضل التطبيقات والألعاب المحلية والعالمية المصممة خصيصًا لك.</p>
+        <a href="#apps"><button>ابدأ التصفح <i class="fas fa-arrow-down"></i></button></a>
+    </section>
+
+    <section id="apps">
+        <h2>اكتشف أحدث التطبيقات</h2>
+        
+        <div class="filter-section">
+            <label for="categoryFilter"><i class="fas fa-filter"></i> تصفية حسب الفئة:</label>
+            <select id="categoryFilter" onchange="filterApps(this.value)">
+                <option value="الكل">الكل</option>
+                <option value="ألعاب">ألعاب</option>
+                <option value="أدوات">أدوات</option>
+                <option value="تواصل">تواصل</option>
+                <option value="تعليم">تعليم</option>
+                <option value="ترفيه">ترفيه</option>
+                <option value="مال وأعمال">مال وأعمال</option>
+                <option value="أخرى">أخرى</option>
+            </select>
+        </div>
+
+        <div id="apps-container">
+            </div>
+    </section>
+
+    <section id="about" style="background-color: #f1f1f1; padding: 60px 20px; text-align: center;">
+        <h2>عن Sudan Play</h2>
+        <p style="max-width: 800px; margin: 0 auto; color: #555; line-height: 1.8;">
+            Sudan Play هو بوابتك لاكتشاف المحتوى الرقمي الموثوق والمناسب للمستخدم السوداني. نحن نسعى لتقديم أفضل تجربة تحميل، مع التركيز على دعم المطورين المحليين وضمان جودة التطبيقات المقدمة. مهمتنا هي ربط المستخدم بالتكنولوجيا التي تخدمه تم تطويره بواسطة Monty GO SDN-Co.ltd.
+        </p>
+    </section>
+
+    <section id="contact">
+        <h2>تواصل معنا</h2>
+        <p>الاستفسارات، و نشر تطبيقك، يرجى ملء النموذج أدناه.</p>
+        <form class="contact-form" id="contactForm">
+            <input type="text" placeholder="اسمك الكامل" required>
+            <input type="email" placeholder="بريدك الإلكتروني" required>
+            <textarea placeholder="رسالتك..." rows="5" required></textarea>
+            <button type="submit">إرسال الرسالة <i class="fas fa-paper-plane"></i></button>
+        </form>
+    </section>
+
+    <div id="appDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="document.getElementById('appDetailsModal').style.display='none'">&times;</span>
+            <div class="details-header">
+                <img id="detailsIcon" src="" alt="App Icon">
+                <div class="details-text">
+                    <h3 id="detailsTitle">اسم التطبيق</h3>
+                    <div class="details-meta">
+                        <span><strong>الفئة:</strong> <span id="detailsCategory"></span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-info">
+                <div>
+                    <p id="detailsRating">4.5</p>
+                    <span>التقييم</span>
+                </div>
+                <div>
+                    <p id="detailsDownloads">0</p>
+                    <span>تحميل</span>
+                </div>
+                <div>
+                    <p id="detailsSize">50 ميغابايت</p>
+                    <span>الحجم</span>
+                </div>
+                <div>
+                    <p id="detailsVersion">1.0.0</p>
+                    <span>الإصدار</span>
+                </div>
+            </div>
+
+            <h4 style="color: var(--dark); margin-bottom: 10px;">الوصف</h4>
+            <p id="detailsDescription" class="details-description"></p>
+
+            <h4 style="color: var(--dark); margin-bottom: 10px;">لقطات الشاشة</h4>
+            <div id="detailsScreenshots">
+                </div>
+
+            <button class="download-modal-btn" onclick="downloadApp(window.currentAppId, this)">تحميل التطبيق الآن <i class="fas fa-download"></i></button>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="" alt="Full Screen Screenshot">
+        </div>
+    </div>
+
+    <div id="toast-message"></div>
+
+    <footer>
+        &copy; 2025 Sudan Play. جميع الحقوق محفوظة. - واتساب: 249127432167 - Monty Go SDN-Co.LTD
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script> 
+    <script>
+        // ----------------- مفاتيح مشروعك "sudan play" الصحيحة -----------------
+        const firebaseConfig = {
+          apiKey: "AIzaSyBJE_Ee-Dyh83iny45eH8lVtTSrIVqTzOI",
+          authDomain: "sudan-play.firebaseapp.com",
+          projectId: "sudan-play",
+          storageBucket: "sudan-play.firebasestorage.app",
+          messagingSenderId: "981764948623",
+          appId: "1:981764948623:web:00e5c9268198f70e39a6fa",
+          measurementId: "G-Y6NP2MNQR9"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        // **ملاحظة: لقد أضفنا حقل appStatus في لوحات التحكم**
+        const appsCollection = db.collection('apps'); 
+        // -----------------------------------------------------------------------
+        
+        let currentAppId = null;
+
+        // دالة عرض الرسائل الاحترافية (Toast/Snackbar)
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById("toast-message");
+            if (!toast) return;
+
+            toast.textContent = message;
+            toast.classList.add("show");
+
+            setTimeout(function(){ 
+                toast.classList.remove("show"); 
+            }, duration);
+        }
+
+        // وظيفة تحميل وعرض التطبيقات من Firestore
+        function loadApps() {
+            const appsContainer = document.getElementById('apps-container');
+            
+            // ** التعديل الأساسي: تصفية التطبيقات لعرض الموافق عليها فقط **
+            appsCollection
+                .where('appStatus', '==', 'Approved') // ** الشرط الجديد للتحكم في النشر **
+                .orderBy('downloads', 'desc')
+                .onSnapshot(snapshot => {
+                    appsContainer.innerHTML = ''; // تفريغ الحاوية قبل إعادة العرض
+                    const apps = [];
+                    snapshot.forEach(doc => {
+                        // نجمع بيانات التطبيق مع مفتاح Firestore
+                        apps.push({ ...doc.data(), id: doc.id }); 
+                    });
+
+                    if (apps.length === 0) {
+                        appsContainer.innerHTML = '<p class="no-apps" style="grid-column: 1 / -1; text-align: center; padding: 20px; font-size: 1.2em; color: var(--secondary);">لا توجد تطبيقات متاحة حاليًا.</p>';
+                        return;
+                    }
+                    
+                    // عرض التطبيقات
+                    apps.forEach(app => {
+                        const appCard = document.createElement('div');
+                        appCard.classList.add('app-card');
+                        appCard.setAttribute('data-category', app.category);
+                        
+                        const iconSrc = app.iconPath || "https://via.placeholder.com/60/000/fff?text=Icon";
+                        const coverSrc = app.coverPath || "https://via.placeholder.com/300x150/000/fff?text=No+Cover";
+                        
+                        const ratingValue = parseFloat(app.rating) || 0;
+                        const fullStars = Array(Math.floor(ratingValue)).fill('<i class="fas fa-star filled"></i>').join('');
+                        const emptyStars = Array(5 - Math.floor(ratingValue)).fill('<i class="fas fa-star"></i>').join('');
+
+                        appCard.innerHTML = `
+                            <div class="app-cover" onclick="openDetailsModal('${app.id}')">
+                                <img src="${coverSrc}" alt="${app.name} Cover">
+                                <div class="overlay">
+                                    <i class="fas fa-search-plus"></i>
+                                </div>
+                            </div>
+                            <div class="app-info">
+                                <img src="${iconSrc}" alt="${app.name} Icon" class="app-icon">
+                                <div class="app-text">
+                                    <h3 class="app-title" onclick="openDetailsModal('${app.id}')">${app.name}</h3>
+                                    <p class="app-category">${app.category}</p>
+                                    <div class="app-rating">
+                                        ${fullStars}
+                                        ${emptyStars}
+                                        <span>(${app.downloads || 0} تنزيل)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="download-btn" onclick="downloadApp('${app.id}', this)">تنزيل <i class="fas fa-download"></i></button>
+                        `;
+                        appsContainer.appendChild(appCard);
+                    });
+
+                    // إعادة تصفية التطبيقات بعد التحميل إذا كان هناك فلتر مطبق
+                    filterApps(document.getElementById('categoryFilter').value); 
+                });
+        }
+
+        // ... (بقية الدوال: openDetailsModal, downloadApp, filterApps, openModal, closeModal, contactForm)
+        // (لا تحتاج لتغيير في الدوال الأخرى)
+
+        // وظيفة عرض التفاصيل
+        window.openDetailsModal = function(id) {
+            appsCollection.doc(id).get().then(doc => {
+                const app = doc.data();
+                if (app) {
+                    window.currentAppId = id; // حفظ مفتاح Firestore
+                    
+                    document.getElementById('detailsIcon').src = app.iconPath || 'https://via.placeholder.com/80/000/fff?text=Icon';
+                    document.getElementById('detailsTitle').textContent = app.name;
+
+                    document.getElementById('detailsCategory').textContent = app.category;
+                    // ملاحظة: قد تحتاج إلى إضافة حقل وصف التطبيق في Firestore
+                    document.getElementById('detailsDescription').textContent = app.description || app.shortDescription || 'لا يتوفر وصف حالياً لهذا التطبيق.'; 
+                    document.getElementById('detailsVersion').textContent = `${app.version || 'غير محدد'}`;
+                    document.getElementById('detailsSize').textContent = `${app.size || 'غير محدد'} ميغابايت`;
+                    
+                    const ratingContainer = document.getElementById('detailsRating');
+                    const ratingValue = parseFloat(app.rating) || 0;
+                    const fullStars = Array(Math.floor(ratingValue)).fill('<i class="fas fa-star filled"></i>').join('');
+
+                    ratingContainer.innerHTML = `${ratingValue} ${fullStars}`;
+
+                    document.getElementById('detailsDownloads').textContent = `${app.downloads || 0}`;
+                    
+                    const screenshotsContainer = document.getElementById('detailsScreenshots');
+                    screenshotsContainer.innerHTML = '';
+                    
+                    if (Array.isArray(app.screenshotsPaths)) { 
+                        app.screenshotsPaths.forEach(src => {
+                            const img = document.createElement('img');
+                            img.src = src;
+                            img.alt = 'لقطة شاشة للتطبيق';
+                            img.onclick = () => openModal(src);
+                            screenshotsContainer.appendChild(img);
+                        });
+                    }
+                    
+                    document.getElementById('appDetailsModal').style.display = 'block';
+                } else {
+                    showToast('لم يتم العثور على التطبيق.');
+                }
+            }).catch(error => {
+                console.error("Error fetching document: ", error);
+                showToast('حدث خطأ أثناء جلب التفاصيل.');
+            });
+        }
+
+        // **دالة التحميل المُعدلة والنهائية: تصحيح اسم الحقل واستخدام طريقة التحميل الموثوقة**
+        window.downloadApp = function(id, buttonElement = null) {
+            let btn = buttonElement;
+            if (!btn) {
+                // محاولة إيجاد الزر داخل المودال إذا لم يتم تمريره
+                btn = document.querySelector('.download-modal-btn');
+            }
+            
+            if (btn) {
+                btn.classList.add('loading');
+            }
+
+            // 1. جلب بيانات التطبيق
+            appsCollection.doc(id).get().then(doc => {
+                if (doc.exists) {
+                    const appData = doc.data();
+                    const currentDownloads = appData.downloads || 0;
+
+                    // 2. زيادة عدد التنزيلات في قاعدة البيانات
+                    appsCollection.doc(id).update({
+                        downloads: currentDownloads + 1
+                    }).then(() => {
+                        
+                        // ⭐ التصحيح هنا: استخدام 'downloadLink' (كما هو موجود في Firestore) وتطبيق طريقة التحميل الموثوقة
+                        if (appData.downloadLink) { 
+                            const downloadLinkElement = document.createElement('a');
+                            downloadLinkElement.href = appData.downloadLink; // استخدام downloadLink
+                            
+                            // إضافة خاصية 'download' لضمان أن المتصفح يتعامل معه كتنزيل ملف
+                            downloadLinkElement.download = appData.name || 'app_file'; 
+
+                            // إدراج العنصر والضغط عليه برمجياً ثم إزالته
+                            document.body.appendChild(downloadLinkElement);
+                            downloadLinkElement.click();
+                            document.body.removeChild(downloadLinkElement); 
+                        } else {
+                            // رسالة خطأ واضحة في الـ Toast إذا لم يتم العثور على الرابط
+                            console.warn(`Error: 'downloadLink' field missing for app: ${appData.name}`);
+                            showToast(`خطأ: لم يتم العثور على ملف تحميل للتطبيق "${appData.name}".`, 5000); 
+                            
+                            if (btn) {
+                                btn.classList.remove('loading');
+                            }
+                            return; 
+                        }
+                        // ⭐ نهاية الكود المُصحح
+
+                        // 3. إزالة تأثير التحميل وإظهار رسالة النجاح
+                        setTimeout(() => {
+                            if (btn) {
+                                btn.classList.remove('loading');
+                            }
+                            showToast(`تم بدء تحميل "${appData.name}" بنجاح!`);
+                        }, 2000);
+
+                    }).catch(error => {
+                        console.error("Error updating downloads: ", error);
+                        if (btn) {
+                            btn.classList.remove('loading');
+                        }
+                        showToast('حدث خطأ أثناء تحديث عدد التنزيلات.');
+                    });
+
+                } else {
+                    if (btn) {
+                        btn.classList.remove('loading');
+                    }
+                    showToast('لم يتم العثور على التطبيق.');
+                }
+            }).catch(error => {
+                console.error("Error getting document: ", error);
+                if (btn) {
+                    btn.classList.remove('loading');
+                }
+                showToast('حدث خطأ أثناء جلب بيانات التطبيق.');
+            });
+        }
+
+
+        // وظيفة تصفية التطبيقات حسب الفئة
+        function filterApps(category) {
+            const appCards = document.querySelectorAll('.app-card');
+            appCards.forEach(card => {
+                if (category === 'الكل' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // وظيفة عرض الصورة في وضع ملء الشاشة
+        function openModal(src) {
+            document.getElementById('modalImage').src = src;
+            document.getElementById('imageModal').style.display = 'block';
+        }
+
+        // وظيفة إغلاق نافذة الصورة
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // إغلاق النوافذ المنبثقة عند النقر خارجها
+        window.onclick = function(event) {
+            const appModal = document.getElementById('appDetailsModal');
+            const imageModal = document.getElementById('imageModal');
+            
+            if (event.target === appModal) {
+                appModal.style.display = 'none';
+            }
+            if (event.target === imageModal) {
+                imageModal.style.display = 'none';
+            }
+        }
+
+        // إرسال نموذج الاتصال
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showToast('تم إرسال رسالتك بنجاح! سنتواصل معك قريبًا.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
