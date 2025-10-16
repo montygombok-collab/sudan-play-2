@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المطور - Sudan Play</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* أنماط CSS المحدثة */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: rgb(74, 107, 255);
+            --secondary: rgb(255, 94, 125);
+            --accent: rgb(46, 196, 182);
+            --dark: rgb(30, 30, 45);
+            --light: rgb(248, 249, 254);
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--dark);
+            color: var(--light);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            background: var(--secondary);
+            color: var(--light);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgb(200, 70, 95);
+        }
+
+        .container {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        @media (min-width: 1024px) {
+            .container {
+                flex-wrap: nowrap;
+            }
+        }
+
+        /* ----- لوحة إضافة التطبيق ----- */
+        .app-form-panel {
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 450px;
+            position: sticky;
+            top: 20px; /* لجعله يلتصق عند التمرير */
+            height: fit-content;
+        }
+        
+        @media (max-width: 1023px) {
+            .app-form-panel {
+                max-width: none;
+                position: static;
+            }
+        }
+
+        .app-form-panel h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(74, 107, 255, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-control, .form-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            transition: border-color 0.3s;
+            resize: vertical;
+        }
+
+        .form-control:focus, .form-textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(74, 107, 255, 0.2);
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-primary, .btn-secondary {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: var(--light);
+            box-shadow: 0 4px 10px rgba(74, 107, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #ccc;
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #bbb;
+        }
+
+        /* ----- قائمة التطبيقات ----- */
+        .app-list-panel {
+            flex-grow: 1;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .app-list-panel h2 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(46, 196, 182, 0.2);
+            padding-bottom: 10px;
+        }
+        
+        .app-item {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+
+        .app-item:last-child {
+            border-bottom: none;
+        }
+
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+        
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .app-details {
+            flex-grow: 1;
+        }
+
+        .app-details h3 {
+            font-size: 16px;
+            margin: 0;
+            color: var(--primary);
+        }
+
+        .app-details p {
+            font-size: 13px;
+            color: #777;
+            margin: 3px 0 0 0;
+        }
+
+        .app-actions {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 16px;
+            padding: 8px;
+            border-radius: 5px;
+            transition: background 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(74, 107, 255, 0.1);
+        }
+
+        .action-btn.delete {
+            color: var(--secondary);
+        }
+        
+        .action-btn.delete:hover {
+            background: rgba(255, 94, 125, 0.1);
+        }
+        
+        /* Modal Style */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); 
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; 
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        .modal-content p {
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .modal-btn.confirm {
+            background-color: var(--secondary);
+            color: white;
+        }
+        .modal-btn.confirm:hover {
+            opacity: 0.9;
+        }
+
+        .modal-btn.cancel {
+            background-color: #ddd;
+            color: var(--dark);
+        }
+        .modal-btn.cancel:hover {
+            background-color: #ccc;
+        }
+        
+        /* Toast Notification Style */
+        .toast {
+            visibility: hidden; 
+            min-width: 250px;
+            background-color: var(--dark);
+            color: var(--light);
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 110;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 30px;
+            font-size: 17px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .toast.show {
+            visibility: visible;
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @-webkit-keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+        @-webkit-keyframes fadeout { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+        @keyframes fadeout { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+
+    </style>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+</head>
+<body>
+
+    <div id="toast" class="toast"></div>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>تأكيد الحذف</h3>
+            <p>هل أنت متأكد أنك تريد حذف التطبيق <strong id="appNamePlaceholder"></strong>؟ لا يمكن التراجع عن هذا الإجراء.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeDeleteModal()">إلغاء</button>
+                <button class="modal-btn confirm" id="confirmDeleteBtn">حذف نهائي</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="header">
+        <h1>لوحة تحكم المطور - Sudan Play</h1>
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+        </button>
+    </div>
+
+    <div class="container">
+        <div class="app-form-panel">
+            <h2 id="formTitle">إضافة تطبيق جديد</h2>
+            <form id="appForm" data-editing-id="">
+                <div class="form-group">
+                    <label for="name">اسم التطبيق</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">الفئة</label>
+                    <input type="text" id="category" name="category" class="form-control" required placeholder="مثل: ألعاب، أدوات، تواصل">
+                </div>
+                
+                <div class="form-group">
+                    <label for="iconPath">رابط الأيقونة (URL)</label>
+                    <input type="url" id="iconPath" name="iconPath" class="form-control" required>
+                </div>
+                
+                <div class="form-group" id="statusDisplay">
+                    <label>حالة التطبيق الحالية:</label>
+                    <p id="currentAppStatus" style="font-weight: bold; color: var(--primary);">Draft</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="shortDescription">وصف مختصر</label>
+                    <textarea id="shortDescription" name="shortDescription" class="form-textarea" rows="2" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullDescription">الوصف الكامل</label>
+                    <textarea id="fullDescription" name="fullDescription" class="form-textarea" rows="4" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="downloadLink">رابط ملف التحميل (APK/متجر)</label>
+                    <input type="url" id="downloadLink" name="downloadLink" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="size">الحجم (بالميجابايت)</label>
+                    <input type="number" step="0.1" id="size" name="size" class="form-control" value="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="rating">التقييم (من 5)</label>
+                    <input type="number" step="0.1" max="5" min="0" id="rating" name="rating" class="form-control" value="0" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="downloads">عدد التنزيلات (رقم صحيح)</label>
+                    <input type="number" id="downloads" name="downloads" class="form-control" value="0" disabled>
+                </div>
+                
+                <div class="form-group">
+                    <label for="screenshotsPaths">روابط صور الشاشة (افصل بينها بفاصلة)</label>
+                    <textarea id="screenshotsPaths" name="screenshotsPaths" class="form-textarea" rows="2" placeholder="URL1, URL2, URL3"></textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="btn-primary" id="submitButton">حفظ وإرسال للمراجعة</button>
+                    <button type="button" class="btn-secondary" id="resetButton">إلغاء/إضافة جديد</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="app-list-panel">
+            <h2>تطبيقاتي المنشورة/قيد المراجعة</h2>
+            <div id="appsList">
+                <div style="text-align: center; padding: 20px; color: #777;">جاري تحميل تطبيقاتك...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ** إعدادات Firebase **
+        var firebaseConfig = {
+            apiKey: "AIzaSyBJE_Ee-Dyh83iny45eH8lVtTSrIVqTzOI",
+            authDomain: "sudan-play.firebaseapp.com",
+            projectId: "sudan-play",
+            storageBucket: "sudan-play.firebasestorage.app",
+            messagingSenderId: "981764948623",
+            appId: "1:981764948623:web:00e5c9268198f70e39a6fa"
+        };
+        
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const appsCollection = db.collection('apps');
+        const usersCollection = db.collection('users');
+        let developerId = null; // لتخزين UID الخاص بالمطور الحالي
+
+        // *******************************************
+        //              دوال واجهة المستخدم
+        // *******************************************
+
+        // 1. دالة عرض إشعار (Toast)
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.className = "toast show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, duration);
+        }
+
+        // 2. دوال الـ Modal المخصص للحذف
+        let currentAppIdToDelete = null;
+        let currentAppNameToDelete = '';
+
+        function showDeleteModal(appId, appName) {
+            currentAppIdToDelete = appId;
+            currentAppNameToDelete = appName;
+            document.getElementById('appNamePlaceholder').textContent = appName;
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            currentAppIdToDelete = null;
+            currentAppNameToDelete = '';
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+            if (currentAppIdToDelete) {
+                deleteApp(currentAppIdToDelete, currentAppNameToDelete);
+            }
+            closeDeleteModal();
+        });
+
+
+        // 3. دالة تسجيل الخروج
+        function logout() {
+            auth.signOut().then(() => {
+                window.location.href = 'login.html';
+            }).catch(error => {
+                showToast(`خطأ في تسجيل الخروج: ${error.message}`);
+                console.error("Logout Error:", error);
+            });
+        }
+        
+        // 4. دالة إعادة تعيين النموذج (Form)
+        function resetForm() {
+            document.getElementById('appForm').reset();
+            document.getElementById('appForm').dataset.editingId = '';
+            document.getElementById('formTitle').textContent = 'إضافة تطبيق جديد';
+            document.getElementById('submitButton').textContent = 'حفظ وإرسال للمراجعة';
+            document.getElementById('resetButton').textContent = 'إلغاء/إضافة جديد';
+            document.getElementById('currentAppStatus').textContent = 'Draft'; 
+        }
+        
+        // 5. دالة ملء النموذج للتعديل
+        function editApp(app) {
+            document.getElementById('name').value = app.name || '';
+            document.getElementById('category').value = app.category || '';
+            document.getElementById('iconPath').value = app.iconPath || '';
+            document.getElementById('shortDescription').value = app.shortDescription || '';
+            document.getElementById('fullDescription').value = app.fullDescription || '';
+            document.getElementById('downloadLink').value = app.downloadLink || '';
+            document.getElementById('size').value = app.size || 0;
+            document.getElementById('rating').value = app.rating || 0;
+            document.getElementById('downloads').value = app.downloads || 0;
+            document.getElementById('screenshotsPaths').value = (app.screenshotsPaths && Array.isArray(app.screenshotsPaths)) ? app.screenshotsPaths.join(', ') : '';
+            document.getElementById('currentAppStatus').textContent = app.appStatus || 'Draft';
+
+
+            // حفظ ID المستند في بيانات النموذج
+            document.getElementById('appForm').dataset.editingId = app.id;
+            document.getElementById('formTitle').textContent = `تعديل التطبيق: ${app.name}`;
+            document.getElementById('submitButton').textContent = 'حفظ التعديلات وإرسال للمراجعة';
+            document.getElementById('resetButton').textContent = 'إلغاء التعديل';
+            
+            // التمرير إلى أعلى الصفحة للبدء بالتعديل
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+
+        // 6. دالة عرض قائمة تطبيقات المطور
+        function renderAppsList(apps) {
+            const listElement = document.getElementById('appsList');
+            listElement.innerHTML = ''; 
+
+            if (apps.length === 0) {
+                listElement.innerHTML = '<div style="text-align: center; padding: 20px; color: #777;">لم تقم بنشر أي تطبيقات بعد. استخدم النموذج أعلاه للبدء.</div>';
+                return;
+            }
+
+            apps.forEach(app => {
+                const item = document.createElement('div');
+                item.className = 'app-item';
+                
+                let statusColor = '#777';
+                let statusText = app.appStatus || 'Draft';
+                if (app.appStatus === 'Approved') {
+                    statusColor = var(--accent);
+                } else if (app.appStatus === 'Pending Review') {
+                    statusColor = var(--primary);
+                } else if (app.appStatus === 'Rejected') {
+                    statusColor = var(--secondary);
+                }
+
+                item.innerHTML = `
+                    <div class="app-icon">
+                        <img src="${app.iconPath}" alt="${app.name} icon" onerror="this.src='https://placehold.co/60x60/888/fff?text=?';">
+                    </div>
+                    <div class="app-details">
+                        <h3>${app.name}</h3>
+                        <p>
+                            <span style="font-weight: bold;">الحالة:</span> 
+                            <span style="color: ${statusColor};">${statusText}</span>
+                            <br>
+                            التنزيلات: ${app.downloads || 0} | التقييم: ${app.rating || 0}
+                        </p>
+                    </div>
+                    <div class="app-actions">
+                        <button class="action-btn edit-btn" data-id="${app.id}" title="تعديل"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete delete-btn" data-id="${app.id}" data-name="${app.name}" title="حذف"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                listElement.appendChild(item);
+            });
+
+            // ربط أزرار التعديل والحذف بالدوال الخاصة بها
+            listElement.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const appId = e.currentTarget.dataset.id;
+                    const appToEdit = apps.find(a => a.id === appId);
+                    if (appToEdit) {
+                        editApp(appToEdit);
+                    }
+                });
+            });
+
+            listElement.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const appId = e.currentTarget.dataset.id;
+                    const appName = e.currentTarget.dataset.name;
+                    showDeleteModal(appId, appName);
+                });
+            });
+        }
+        
+        
+        // *******************************************
+        //              دوال Firebase
+        // *******************************************
+
+        // 7. دالة الحذف
+        function deleteApp(appId, appName) {
+            if (!appId) {
+                showToast('❌ خطأ: لم يتم تحديد معرف التطبيق.', 4000);
+                return;
+            }
+
+            appsCollection.doc(appId).delete()
+                .then(() => {
+                    showToast(`✅ تم حذف التطبيق "${appName}" بنجاح!`, 4000);
+                })
+                .catch(error => {
+                    console.error("Error removing document: ", error);
+                    showToast(`❌ خطأ في الحذف: ${error.message}.`, 7000);
+                });
+        }
+
+
+        // 8. دالة جلب التطبيقات (تطبيقات المطور الحالي فقط)
+        function loadApps() {
+            if (!developerId) return;
+
+            // ** الشرط الأساسي: جلب التطبيقات حيث developerId == UID الحالي **
+            appsCollection
+                .where('developerId', '==', developerId)
+                .orderBy('createdAt', 'desc')
+                .onSnapshot(snapshot => {
+                    const appsArray = [];
+                    snapshot.forEach(doc => {
+                        const appData = doc.data();
+                        appsArray.push({
+                            id: doc.id, 
+                            ...appData,
+                            downloads: appData.downloads ? parseInt(appData.downloads) : 0 
+                        });
+                    });
+
+                    renderAppsList(appsArray);
+                }, error => {
+                    console.error("Error listening to apps collection:", error);
+                    showToast(`❌ خطأ في جلب البيانات: ${error.message}`, 5000);
+                });
+        }
+
+        
+        // *******************************************
+        //              التهيئة والبدء
+        // *******************************************
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // التحقق من تسجيل الدخول والمصادقة على دور "المطور"
+            auth.onAuthStateChanged(user => {
+                if (!user) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                developerId = user.uid; // حفظ معرف المطور الحالي
+
+                // التأكد من أن المستخدم هو "مطور"
+                usersCollection.doc(user.uid).get().then(doc => {
+                    if (!doc.exists || doc.data().role !== 'developer') {
+                        alert('غير مصرح لك بالدخول إلى لوحة تحكم المطور!');
+                        auth.signOut();
+                        window.location.href = 'login.html';
+                    } else {
+                        // البدء بتحميل تطبيقات المطور الحالي
+                        loadApps();
+                    }
+                }).catch(error => {
+                    console.error("Error fetching user role: ", error);
+                    alert('خطأ في التحقق من الصلاحيات.');
+                    auth.signOut();
+                    window.location.href = 'login.html';
+                });
+            });
+
+            const appForm = document.getElementById('appForm');
+            const resetButton = document.getElementById('resetButton');
+
+            // دالة جلب بيانات النموذج
+            function getFormData() {
+                return {
+                    name: document.getElementById('name').value,
+                    category: document.getElementById('category').value,
+                    iconPath: document.getElementById('iconPath').value,
+                    shortDescription: document.getElementById('shortDescription').value,
+                    fullDescription: document.getElementById('fullDescription').value,
+                    downloadLink: document.getElementById('downloadLink').value,
+                    size: document.getElementById('size').value,
+                    screenshotsPaths: document.getElementById('screenshotsPaths').value
+                    // التقييم والتنزيلات لا يتم أخذها من النموذج هنا (disabled)
+                };
+            }
+
+            // معالجة إرسال النموذج (إضافة/تعديل)
+            appForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                if (!developerId) {
+                    showToast('خطأ: لم يتم التعرف على معرف المطور. حاول تسجيل الدخول مرة أخرى.', 6000);
+                    return;
+                }
+
+                const formData = getFormData();
+                const editingId = appForm.dataset.editingId;
+
+                const screenshotsArray = formData.screenshotsPaths.split(',').map(s => s.trim()).filter(s => s.length > 0);
+                
+                const appData = {
+                    ...formData,
+                    size: parseFloat(formData.size) || 0,
+                    // ** القيم الافتراضية للتقييم/التنزيلات التي لا يتحكم بها المطور **
+                    rating: parseFloat(document.getElementById('rating').value) || 0, 
+                    downloads: parseInt(document.getElementById('downloads').value) || 0, 
+                    screenshotsPaths: screenshotsArray,
+                    developerId: developerId, // ** تعيين معرف المطور الحالي تلقائياً **
+                    // ** تعيين حالة التطبيق إلى "قيد المراجعة" ليتولى المشرف الأمر **
+                    appStatus: 'Pending Review',
+                    createdAt: editingId ? (appData.createdAt || firebase.firestore.FieldValue.serverTimestamp()) : firebase.firestore.FieldValue.serverTimestamp() 
+                };
+                
+                let promise;
+                if (editingId) {
+                    // تعديل (Update)
+                    promise = appsCollection.doc(editingId).update(appData);
+                } else {
+                    // إضافة جديد (Add)
+                    promise = appsCollection.add(appData);
+                }
+
+                promise.then(() => {
+                    showToast('✅ تم حفظ التطبيق وإرساله للمراجعة بنجاح!', 4000);
+                    resetForm();
+                }).catch(error => {
+                    showToast(`❌ حدث خطأ أثناء الحفظ: ${error.message}.`, 5000);
+                    console.error("Error writing document: ", error);
+                });
+            });
+            
+            if(resetButton) {
+                 resetButton.addEventListener('click', resetForm);
+            }
+        });
+    </script>
+</body>
+</html>
