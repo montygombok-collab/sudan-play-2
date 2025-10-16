@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - Sudan Play</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: rgb(74, 107, 255);
+            --secondary: rgb(255, 94, 125);
+            --dark: rgb(30, 30, 45);
+            --light: rgb(248, 249, 254);
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        body {
+            background: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-container h2 {
+            color: var(--dark);
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+            font-size: 1.8em;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.1);
+        }
+        .btn-login {
+            background: var(--gradient);
+            color: var(--light);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            width: 100%;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .btn-login:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        .register-link {
+            display: block;
+            margin-top: 15px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+        .register-link:hover {
+            text-decoration: underline;
+        }
+        #error-message {
+            color: var(--secondary);
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>تسجيل الدخول</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني</label>
+                <input type="email" id="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">كلمة المرور</label>
+                <input type="password" id="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn-login">دخول</button>
+        </form>
+        <a href="#" class="register-link">للتسجيل كمطور، يرجى التواصل مع الإدارة</a>
+        <p id="error-message"></p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script>
+        // ** إعدادات Firebase ** (استخدم نفس إعداداتك)
+        var firebaseConfig = {
+            apiKey: "AIzaSyBJE_Ee-Dyh83iny45eH8lVtTSrIVqTzOI",
+            authDomain: "sudan-play.firebaseapp.com",
+            projectId: "sudan-play",
+            storageBucket: "sudan-play.firebasestorage.app",
+            messagingSenderId: "981764948623",
+            appId: "1:981764948623:web:00e5c9268198f70e39a6fa"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const usersCollection = db.collection('users'); // ** مجموعة جديدة لتخزين الأدوار **
+
+        // تحقق من وجود مستخدم مسجل مسبقاً
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // المستخدم مسجل الدخول، تحقق من دوره
+                checkUserRole(user.uid);
+            }
+        });
+
+        function showErrorMessage(message) {
+            const errorElement = document.getElementById('error-message');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function checkUserRole(uid) {
+             // 1. تحقق من مجموعة المستخدمين لمعرفة الدور (Admin, Developer)
+             usersCollection.doc(uid).get().then(doc => {
+                 if (doc.exists) {
+                     const userRole = doc.data().role;
+                     if (userRole === 'admin') {
+                         window.location.href = 'admin_dashboard.html';
+                     } else if (userRole === 'developer') {
+                         window.location.href = 'developer_dashboard.html';
+                     } else {
+                         // دور غير معروف
+                         showErrorMessage('دور المستخدم غير محدد. يرجى مراجعة الإدارة.');
+                         auth.signOut();
+                     }
+                 } else {
+                    // لم يتم العثور على سجل دور في Firestore، إما حساب جديد أو غير مصرح به
+                    showErrorMessage('لم يتم العثور على دور المستخدم في قاعدة البيانات. يرجى مراجعة الإدارة.');
+                    auth.signOut();
+                 }
+             }).catch(error => {
+                 showErrorMessage(`خطأ في جلب الدور: ${error.message}`);
+                 auth.signOut();
+             });
+        }
+
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            document.getElementById('error-message').style.display = 'none';
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    // تم تسجيل الدخول بنجاح، توجيه المستخدم
+                    checkUserRole(userCredential.user.uid);
+                })
+                .catch(error => {
+                    if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                        showErrorMessage('البريد الإلكتروني أو كلمة المرور غير صحيحة.');
+                    } else if (error.code === 'auth/invalid-email') {
+                         showErrorMessage('صيغة البريد الإلكتروني غير صحيحة.');
+                    } else {
+                        showErrorMessage(`خطأ في تسجيل الدخول: ${error.message}`);
+                    }
+                });
+        });
+        
+        // ملاحظة للمستخدم: يجب عليك إنشاء مستندات في مجموعة 'users' في Firestore تحتوي على {role: 'admin'} أو {role: 'developer'} لكل مستخدم.
+    </script>
+</body>
+</html>
